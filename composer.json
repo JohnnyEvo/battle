@@ -1,0 +1,20 @@
+{
+  "name": "jcharcosset/battle",
+  "autoload": {
+    "psr-4": {
+      "Jcharcosset\\Battle\\": "src/"
+    },
+    "files": [
+      "config.php"
+    ]
+  },
+  "authors": [
+    {
+      "name": "Johnny Charcosset",
+      "email": "charcosset.johnny@gmail.com"
+    }
+  ],
+  "require-dev": {
+    "symfony/var-dumper": "^6.2"
+  }
+}
