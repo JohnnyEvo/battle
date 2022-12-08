@@ -1,14 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Jcharcosset\Battle\Factories;
 
 use Jcharcosset\Battle\Cards;
-use Jcharcosset\Battle\Contracts\GameInterface;
 use Jcharcosset\Battle\Fighter;
 use Jcharcosset\Battle\Game;
 use Jcharcosset\Battle\Score;
 
-class CreateGame
+final class CreateGame
 {
     private Fighter $fighter;
     private Score $score;
@@ -21,6 +22,11 @@ class CreateGame
         $this->createPlayers($names);
     }
 
+    public function create(): Game
+    {
+        return new Game($this->fighter, $this->score);
+    }
+
     private function createPlayers(array $names): void
     {
         $card = Cards::get();
@@ -29,10 +35,5 @@ class CreateGame
             $player = (new CreatePlayer($card))->create($name);
             $this->fighter->addPlayer($player);
         }
-    }
-
-    public function create(): GameInterface
-    {
-        return new Game($this->fighter, $this->score);
     }
 }

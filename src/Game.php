@@ -1,35 +1,37 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Jcharcosset\Battle;
 
-use Jcharcosset\Battle\Contracts\FighterInterface;
-use Jcharcosset\Battle\Contracts\GameInterface;
-use Jcharcosset\Battle\Contracts\PlayerInterface;
-use Jcharcosset\Battle\Contracts\ResultInterface;
-use Jcharcosset\Battle\Contracts\ScoreInterface;
-use Jcharcosset\Battle\Exceptions\NoCardsException;
-use Jcharcosset\Battle\Utils\useHighArrayElements;
+use Jcharcosset\Battle\Contracts\Fighter;
+use Jcharcosset\Battle\Contracts\Game as GameInterface;
+use Jcharcosset\Battle\Contracts\Player;
+use Jcharcosset\Battle\Contracts\Result as ResultInterface;
+use Jcharcosset\Battle\Contracts\Score;
+use Jcharcosset\Battle\Exceptions\NoCards;
+use Jcharcosset\Battle\Utils\UseHighArrayElements;
 
-class Game implements GameInterface
+final class Game implements GameInterface
 {
-    use useHighArrayElements;
+    use UseHighArrayElements;
 
     protected array $players;
     protected ResultInterface $result;
 
     public function __construct(
-        protected FighterInterface $fighter,
-        protected ScoreInterface $score,
+        protected Fighter $fighter,
+        protected Score $score,
     ) {
         $this->players = $this->fighter->getPlayers();
 
         foreach ($this->players as $player) {
-            /** @var PlayerInterface $player */
+            /** @var Player $player */
             $player->getHandCards()->generateHandCards();
         }
     }
 
-    public function fight(): ScoreInterface
+    public function fight(): Score
     {
         try {
             $pickCards = $this->pickCards();
@@ -38,7 +40,7 @@ class Game implements GameInterface
             foreach ($winners as $winner) {
                 $this->score->add($winner);
             }
-        } catch (NoCardsException) {
+        } catch (NoCards) {
             return $this->score;
         }
 
@@ -52,7 +54,7 @@ class Game implements GameInterface
         $cards = [];
 
         foreach ($this->players as $player) {
-            /** @var PlayerInterface $player */
+            /** @var Player $player */
             $cards[$player->getName()] = $player->getHandCards()->pickCard();
         }
 

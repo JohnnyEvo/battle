@@ -1,15 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Jcharcosset\Battle;
 
-use Jcharcosset\Battle\Contracts\HandCardInterface;
-use Jcharcosset\Battle\Contracts\PlayerInterface;
+use Jcharcosset\Battle\Contracts\HandCard;
+use Jcharcosset\Battle\Contracts\Player as PlayerInterface;
 
-class Player implements PlayerInterface
+final class Player implements PlayerInterface
 {
     private string $name;
 
-    public function __construct(protected HandCardInterface $handCard)
+    public function __construct(protected HandCard $handCard)
     {
     }
 
@@ -20,7 +22,7 @@ class Player implements PlayerInterface
         return $this;
     }
 
-    public function getHandCards(): HandCardInterface
+    public function getHandCards(): HandCard
     {
         return $this->handCard;
     }

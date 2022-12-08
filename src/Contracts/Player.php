@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Jcharcosset\Battle\Contracts;
 
-interface PlayerInterface
+interface Player
 {
     public function getName(): string;
 
-    public function getHandCards(): HandCardInterface;
+    public function getHandCards(): HandCard;
 }

@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Jcharcosset\Battle\Utils;
 
-trait useHighArrayElements
+trait UseHighArrayElements
 {
     public function getHighArrayElement(array $elements): array
     {

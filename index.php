@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 use Jcharcosset\Battle\Factories\CreateGame;
 use Jcharcosset\Battle\Outputs\ScoreOutput;
 
 require './vendor/autoload.php';
 
-$game = (new CreateGame("Bob", "Alice"))->create();
+$game = (new CreateGame('Bob', 'Alice'))->create();
 
 $score = $game->fight();
 

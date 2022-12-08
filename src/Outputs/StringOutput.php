@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Jcharcosset\Battle\Outputs;
 
-use Jcharcosset\Battle\Contracts\OutputInterface;
+use Jcharcosset\Battle\Contracts\Output as OutputInterface;
 
-class StringOutput implements OutputInterface
+abstract class StringOutput implements OutputInterface
 {
     protected string $message = '';
 

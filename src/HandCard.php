@@ -1,26 +1,28 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Jcharcosset\Battle;
 
-use Jcharcosset\Battle\Contracts\CardInterface;
-use Jcharcosset\Battle\Contracts\HandCardInterface;
-use Jcharcosset\Battle\Exceptions\NoCardsException;
+use Jcharcosset\Battle\Contracts\Cards;
+use Jcharcosset\Battle\Contracts\HandCard as HandCardInterface;
+use Jcharcosset\Battle\Exceptions\NoCards;
 
-class HandCard implements HandCardInterface
+final class HandCard implements HandCardInterface
 {
-    protected array $handCards;
+    private array $handCards;
 
-    public function __construct(protected CardInterface $card)
+    public function __construct(protected Cards $card)
     {
     }
 
     /**
-     * @throws NoCardsException
+     * @throws NoCards
      */
     public function pickCard(): int
     {
-        if(empty($this->handCards)) {
-            throw new NoCardsException();
+        if (count($this->handCards) === 0) {
+            throw new NoCards();
         }
 
         $cardPicked = $this->handCards[0];

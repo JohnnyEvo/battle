@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Jcharcosset\Battle\Contracts;
 
-interface ScoreInterface
+interface Score
 {
     public function add(string $name, int $point = 1): void;
 

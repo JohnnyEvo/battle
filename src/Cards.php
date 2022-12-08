@@ -1,26 +1,28 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Jcharcosset\Battle;
 
-use Jcharcosset\Battle\Contracts\CardInterface;
-use Jcharcosset\Battle\Exceptions\MissingCardsException;
-use Jcharcosset\Battle\Exceptions\NoPlayerException;
-use Jcharcosset\Battle\Exceptions\NotEnoughCardsException;
+use Jcharcosset\Battle\Contracts\Cards as CardsInterface;
+use Jcharcosset\Battle\Exceptions\MissingCards;
+use Jcharcosset\Battle\Exceptions\NoPlayer;
+use Jcharcosset\Battle\Exceptions\NotEnoughCards;
 
-class Cards implements CardInterface
+final class Cards implements CardsInterface
 {
+    private array $stack = [];
+    private int $card_number;
+    private int $player_number = 0;
     private static $instance = null;
-    public array $stack = [];
-    protected int $card_number;
-    protected int $player_number = 0;
 
     /**
-     * @throws MissingCardsException
+     * @throws MissingCards
      */
     private function __construct()
     {
         if (CONFIG['card_number'] % 2) {
-            throw new MissingCardsException("Oops. Cards are missing from the game");
+            throw new MissingCards('Oops. Cards are missing from the game');
         }
 
         $this->card_number = CONFIG['card_number'];
@@ -29,19 +31,9 @@ class Cards implements CardInterface
         $this->shuffle();
     }
 
-    private function generate(): void
-    {
-        $this->stack = range(1, CONFIG['card_number']);
-    }
-
-    private function shuffle(): void
-    {
-        shuffle($this->stack);
-    }
-
     public static function get(): ?Cards
     {
-        if (self::$instance == null) {
+        if (self::$instance === null) {
             self::$instance = new Cards();
         }
 
@@ -49,14 +41,14 @@ class Cards implements CardInterface
     }
 
     /**
-     * @throws NotEnoughCardsException
+     * @throws NotEnoughCards
      */
     public function distribute(): array
     {
-        $output = array_splice($this->stack, 0, floor($this->card_number / $this->player_number));
+        $output = array_splice($this->stack, 0, (int) floor($this->card_number / $this->player_number));
 
         if ($output < $this->card_number / $this->player_number) {
-            throw new NotEnoughCardsException();
+            throw new NotEnoughCards();
         }
 
         return $output;
@@ -70,16 +62,26 @@ class Cards implements CardInterface
     }
 
     /**
-     * @throws NoPlayerException
+     * @throws NoPlayer
      */
     public function removePlayer(): self
     {
         $this->player_number--;
 
         if ($this->player_number <= 0) {
-            throw new NoPlayerException();
+            throw new NoPlayer();
         }
 
         return $this;
+    }
+
+    private function generate(): void
+    {
+        $this->stack = range(1, CONFIG['card_number']);
+    }
+
+    private function shuffle(): void
+    {
+        shuffle($this->stack);
     }
 }
